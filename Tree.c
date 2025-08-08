@@ -63,6 +63,24 @@ void insertNode(Node **root,int value)
     }
 }
 
+Node *bstInsertion(Node *root,int value){
+    
+    if(root==NULL)
+    {
+        return createNode(value);
+    }
+
+    if(root->data > value)
+    {
+        root->left = bstInsertion(root->left,value);
+    } else if(root->data < value)
+    {
+        root->right = bstInsertion(root->right,value);
+    }
+    return root;
+}
+
+
 Node *getDeppestRightNode(Node **root)
 {
     Node *queue[100];
@@ -86,7 +104,6 @@ Node *getDeppestRightNode(Node **root)
 
      return temp;
 }
-
 
 Node *search(Node *root,int value)
 {
@@ -184,5 +201,6 @@ int  main()
     if (deepest!= NULL)
         printf("Deepest rightmost node: %d\n", deepest->data);
     return 0;
+
 
 }
