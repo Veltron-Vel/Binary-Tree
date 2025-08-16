@@ -105,6 +105,76 @@ Node *getDeppestRightNode(Node **root)
      return temp;
 }
 
+void deleteNode(Node **root, int value)
+{
+    if (*root == NULL)
+    {
+        printf("The tree is empty\n");
+        return;
+    }
+
+    Node *queue[100];
+    Node *temp;
+    Node *toDelete = NULL;
+    int front = -1, rear = -1;
+
+    // BFS to find node to delete
+    queue[++rear] = *root;
+    while (front != rear)
+    {
+        temp = queue[++front];
+        if (temp->data == value)
+        {
+            toDelete = temp;
+        }
+        if (temp->left != NULL) queue[++rear] = temp->left;
+        if (temp->right != NULL) queue[++rear] = temp->right;
+    }
+
+    if (toDelete != NULL)
+    {
+        Node *deepestNode = getDeppestRightNode(root);
+        toDelete->data = deepestNode->data;
+
+        // BFS again to delete deepestNode
+        front = rear = -1;
+        queue[++rear] = *root;
+
+        while (front != rear)
+        {
+            temp = queue[++front];
+
+            if (temp->left != NULL)
+            {
+                if (temp->left == deepestNode)
+                {
+                    temp->left = NULL;
+                    free(deepestNode);
+                    return;
+                }
+                queue[++rear] = temp->left;
+            }
+
+            if (temp->right != NULL)
+            {
+                if (temp->right == deepestNode)
+                {
+                    temp->right = NULL;
+                    free(deepestNode);
+                    return;
+                }
+                queue[++rear] = temp->right;
+            }
+        }
+    }
+    else
+    {
+        printf("Value was not found in the tree\n");
+        return;
+    }
+}
+
+
 Node *search(Node *root,int value)
 {
     if(root==NULL)
@@ -204,3 +274,4 @@ int  main()
 
 
 }
+
